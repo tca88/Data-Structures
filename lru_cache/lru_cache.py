@@ -1,6 +1,9 @@
+from doubly_linked_list import DoublyLinkedList
+
 class LRUCache:
+  # Need to store Key/value pairs
+  # size of the cache and max capacity
   def __init__(self, limit=10):
-    pass
 
   """
   Retrieves the value associated with the given key. Also
@@ -9,8 +12,10 @@ class LRUCache:
   Returns the value associated with the key or None if the
   key-value pair doesn't exist in the cache. 
   """
+    self.list = DoublyLinkedList()
+        self.dict = {}
+        self.limit = limit
   def get(self, key):
-    pass
 
   """
   Adds the given key-value pair to the cache. The newly-
