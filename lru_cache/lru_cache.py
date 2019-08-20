@@ -4,20 +4,31 @@ class LRUCache:
   # Need to store Key/value pairs
   # size of the cache and max capacity
   def __init__(self, limit=10):
+    self.list = DoublyLinkedList()
+    self.dict = {}
+    self.limit = limit
+  
 
-  """
+    """
   Retrieves the value associated with the given key. Also
   needs to move the key-value pair to the top of the order
   such that the pair is considered most-recently used.
   Returns the value associated with the key or None if the
   key-value pair doesn't exist in the cache. 
   """
-    self.list = DoublyLinkedList()
-        self.dict = {}
-        self.limit = limit
-  def get(self, key):
 
-  """
+  def get(self, key):
+    if key in self.dict:
+      node = self.dict[key]
+      
+      self.list.delete(node)
+      self.list.add_to(node)
+      return node.value
+
+    else: 
+      return None
+
+    """
   Adds the given key-value pair to the cache. The newly-
   added pair should be considered the most-recently used
   entry in the cache. If the cache is already at max capacity
@@ -27,5 +38,6 @@ class LRUCache:
   want to overwrite the old value associated with the key with
   the newly-specified value. 
   """
+
   def set(self, key, value):
     pass
