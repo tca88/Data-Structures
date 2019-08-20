@@ -1,13 +1,13 @@
 from doubly_linked_list import DoublyLinkedList
+from doubly_linked_list import ListNode
 
 class LRUCache:
   # Need to store Key/value pairs
   # size of the cache and max capacity
-  def __init__(self, limit=10):
-    self.list = DoublyLinkedList()
-    self.dict = {}
-    self.limit = limit
   
+  def __init__(self, limit=10):
+    self.limit = limit
+    self.cache = {}
 
     """
   Retrieves the value associated with the given key. Also
@@ -16,17 +16,18 @@ class LRUCache:
   Returns the value associated with the key or None if the
   key-value pair doesn't exist in the cache. 
   """
-
   def get(self, key):
-    if key in self.dict:
-      node = self.dict[key]
-      
-      self.list.delete(node)
-      self.list.add_to(node)
-      return node.value
-
-    else: 
+    if key in self.cache.keys():
+      current = self.keyChain.head
+      while current.value != key:
+        current = current.next
+      self.keyChain.move_to_end(current)
+      return self.cache[key]
+    else:
       return None
+  
+      
+      
 
     """
   Adds the given key-value pair to the cache. The newly-
@@ -40,4 +41,25 @@ class LRUCache:
   """
 
   def set(self, key, value):
-    pass
+    if len(self.cache.keys()) == 0:
+      #If this is the first item in cache
+      self.keyChain = DoublyLinkedList(ListNode(key))
+      self.cache[key] = value
+    elif key in self.cache.keys():
+      #Else If this key is already in cache
+      self.cache[key] = value
+      current = self.keyChain.head
+      while current.value != key:
+        current = current.next
+      self.keyChain.move_to_end(current)
+    elif len(self.cache.keys()) == self.limit:
+      #Else If the cache is at its limits
+      del self.cache[self.keyChain.head.value]
+      self.keyChain.remove_from_head()
+      self.keyChain.add_to_tail(key)
+      self.cache[key] = value
+
+    else:
+      #Else Neither of the above conditions are true
+      self.keyChain.add_to_tail(key)
+      self.cache[key] = value
